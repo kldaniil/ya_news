@@ -5,8 +5,13 @@ import pytest
 from django.test.client import Client
 from django.conf import settings
 from django.utils import timezone
+from django.urls import reverse
 
 from news.models import Comment, News
+
+
+COMMENT_TEXT = 'Текст комментария'
+NEW_COMMENT_TEXT = 'Новый текст комментария'
 
 
 @pytest.fixture
@@ -58,7 +63,7 @@ def news_id_for_args(news):
 @pytest.fixture
 def comments(author, news):
     comment = Comment.objects.create(
-        text='Текст комментария',
+        text=COMMENT_TEXT,
         author=author,
         news=news
     )
@@ -72,7 +77,7 @@ def comments_id_for_args(comments):
 
 @pytest.fixture
 def much_news():
-    for index in range(settings.NEWS_COUNT_ON_HOME_PAGE +1):
+    for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1):
         today = datetime.today()
         all_news = [
             News(
@@ -97,3 +102,19 @@ def many_comments(news, author):
         # Меняем время создания комментария.
         comment.created = now + timedelta(days=index)
         comment.save()
+
+
+@pytest.fixture
+def form_data(news, author):
+    return {
+        'text': NEW_COMMENT_TEXT,
+        'author': author,
+        'news': news,
+    }
+
+
+@pytest.fixture
+def comments_url(news):
+    url = reverse('news:detail', args=(news.id,))
+    new_url = url + '#comments'
+    return new_url

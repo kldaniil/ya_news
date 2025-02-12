@@ -3,9 +3,7 @@ from pytest_lazyfixture import lazy_fixture
 
 from django.urls import reverse
 from django.conf import settings
-from django.utils import timezone
 
-from news.models import News, Comment
 from news.forms import CommentForm
 
 
