@@ -1,6 +1,10 @@
+from datetime import datetime, timedelta
+
 import pytest
 
 from django.test.client import Client
+from django.conf import settings
+from django.utils import timezone
 
 from news.models import Comment, News
 
@@ -14,6 +18,12 @@ def author(django_user_model):
 @pytest.fixture
 def not_author(django_user_model):
     return django_user_model.objects.create(username='Не автор')
+
+
+@pytest.fixture
+def anonymous_client():
+    client = Client()
+    return client
 
 
 @pytest.fixture
@@ -58,3 +68,32 @@ def comments(author, news):
 @pytest.fixture
 def comments_id_for_args(comments):
     return (comments.id,)
+
+
+@pytest.fixture
+def much_news():
+    for index in range(settings.NEWS_COUNT_ON_HOME_PAGE +1):
+        today = datetime.today()
+        all_news = [
+            News(
+                title=f'Новость {index}',
+                text=f'Текст новости {index}.',
+                date=today - timedelta(days=index)
+            )
+            for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
+        ]
+        News.objects.bulk_create(all_news)
+
+
+@pytest.fixture
+def many_comments(news, author):
+    now = timezone.now()
+    for index in range(2):
+        comment = Comment.objects.create(
+            news=news,
+            author=author,
+            text=f'Текст {index}',
+        )
+        # Меняем время создания комментария.
+        comment.created = now + timedelta(days=index)
+        comment.save()

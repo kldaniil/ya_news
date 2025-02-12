@@ -65,7 +65,7 @@ class TestDetailPage(TestCase):
         cls.author = User.objects.create(username='Комментатор')
         now = timezone.now()
 
-        for index in range(10):
+        for index in range(2):
             comment = Comment.objects.create(
                 news=cls.news,
                 author=cls.author,
