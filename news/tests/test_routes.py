@@ -28,19 +28,6 @@ class TestRoutes(TestCase):
             text='текст комментария'
         )
 
-    # def test_home_page(self):
-    #     # Вместо прямого указания адреса
-    #     # получаем его при помощи функции reverse().
-    #     url = reverse('news:home')
-    #     response = self.client.get(url)
-    #     # Проверяем, что код ответа равен статусу OK (он же 200).
-    #     self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    # def test_detail_page(self):
-    #     url = reverse('news:detail', kwargs={'pk': self.news.pk})
-    #     responce = self.client.get(url)
-    #     self.assertEqual(responce.status_code, HTTPStatus.OK)
-
     def test_pages_availability(self):  # вместо верхних вдух.
         # Создаём набор тестовых данных - кортеж кортежей.
         # Каждый вложенный кортеж содержит два элемента:
